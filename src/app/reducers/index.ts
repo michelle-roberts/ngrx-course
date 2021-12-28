@@ -4,6 +4,7 @@ import { routerReducer } from "@ngrx/router-store";
 
 export interface AppState {}
 
+// Block below is Router reducer set up for Time travel debugger ( Step 1 set up found in app.module.ts )
 export const reducers: ActionReducerMap<AppState> = {
     router: routerReducer
 }

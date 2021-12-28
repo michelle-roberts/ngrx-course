@@ -51,9 +51,18 @@ const routes: Routes = [
     MatListModule,
     MatToolbarModule,
     AuthModule.forRoot(),
-    StoreModule.forRoot(reducers, { metaReducers}),
+    StoreModule.forRoot(reducers, { 
+      metaReducers,
+      runtimeChecks: {
+        strictStateImmutability: true, // Prevents state from being mutated (i.e. by reducers, etc.)
+        strictActionImmutability: true, // Prevents action object from being mutated
+        strictActionSerializability: true, // Ensures that actions are serializable, can be saved by devTools to be replayed by debugger
+        strictStateSerializability: true, // Ensures that state is serializable
+      }
+    }),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
     EffectsModule.forRoot([]),
+    // Block below is App Module set up for Time travel debugger ( Step 2 set up found in app/reducers/index.ts )
     StoreRouterConnectingModule.forRoot({
       stateKey: 'router',
       routerState:RouterState.Minimal
