@@ -9,6 +9,7 @@ export const reducers: ActionReducerMap<AppState> = {
     router: routerReducer
 }
 
+// MetaReducer
 export function logger(reducer: ActionReducer<any>): ActionReducer<any> {
     return (state, action) => {
         return reducer(state, action)
