@@ -28,7 +28,7 @@ jobs:
 
       - name: npm install
         working-directory: ./application
-        run: npm i --ignore-scripts
+#         run: npm i --ignore-scripts
 
       - name: Run ESLint
         uses: ninosaurus/eslint-check@v5
