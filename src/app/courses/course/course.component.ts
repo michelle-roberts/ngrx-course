@@ -17,22 +17,19 @@ import { LessonEntityService } from '../services/lesson-entity.service';
 export class CourseComponent implements OnInit {
 
   course$: Observable<Course>;
-
   lessons$: Observable<Lesson[]>;
+  loading$: Observable<Boolean>;
 
   displayedColumns = ['seqNo', 'description', 'duration'];
-
   nextPage = 0;
 
   constructor(
     private coursesService: CourseEntityService,
     private lessonService: LessonEntityService,
-    private route: ActivatedRoute) {
-
-  }
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
-
     const courseUrl = this.route.snapshot.paramMap.get("courseUrl");
 
     this.course$ = this.coursesService.entities$
@@ -40,13 +37,27 @@ export class CourseComponent implements OnInit {
         map(courses => courses.find(course => course.url == courseUrl)) 
       );
 
-    this.lessons$ = of([]);
+    this.lessons$ = this.lessonService.entities$
+      .pipe(
+        withLatestFrom(this.course$),
+        tap(([lessons, course]) => {
+          if (this.nextPage == 0) {
+            this.loadLessonsPage(course)
+          }
+        }),
+        map(([lessons, course]) => lessons.filter(lesson => lesson.courseId == course.id))
+      );
 
+    this.loading$ = this.lessonService.loading$.pipe(delay(0));
   }
 
-
   loadLessonsPage(course: Course) {
-
+    this.lessonService.getWithQuery({
+      'courseId': course.id.toString(),
+      'pageNumber': this.nextPage.toString(),
+      'pageSize': '3'
+    });
+    this.nextPage += 1;
   }
 
 }
