@@ -20,6 +20,8 @@ export class HomeComponent implements OnInit {
     loading$: Observable<boolean>;
 
     beginnerCourses$: Observable<Course[]>;
+    
+    intermediateCourses$: Observable<Course[]>;
 
     advancedCourses$: Observable<Course[]>;
 
@@ -39,6 +41,11 @@ export class HomeComponent implements OnInit {
     this.beginnerCourses$ = this.coursesService.entities$
       .pipe(
         map(courses => courses.filter(course => course.category == 'BEGINNER'))
+      );
+    
+    this.intermediateCourses$ = this.coursesService.entities$
+      .pipe(
+        map(courses => courses.filter(course => course.category == 'INTERMEDIATE'))
       );
 
 

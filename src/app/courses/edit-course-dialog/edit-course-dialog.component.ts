@@ -26,8 +26,9 @@ export class EditCourseDialogComponent {
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<EditCourseDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) data,
-    private coursesService: CourseEntityService) {
+    private coursesService: CourseEntityService,
+    @Inject(MAT_DIALOG_DATA) data
+  ) {
 
     this.dialogTitle = data.dialogTitle;
     this.course = data.course;
@@ -66,6 +67,14 @@ export class EditCourseDialogComponent {
     if (this.mode == 'update') {
       this.coursesService.update(course);
       this.dialogRef.close();
+    } else if (this.mode == 'create') {
+      this.coursesService.add(course)
+        .subscribe(
+          newCourse => {
+            console.log('Added new course: ', newCourse);
+            this.dialogRef.close();
+          }
+        );
     }
   }
 }
